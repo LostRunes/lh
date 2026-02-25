@@ -101,9 +101,9 @@ export function getUPoints(count) {
 
 export function getHehePoints(count) {
     const points = [];
-    const spacing = 4;
+    const spacing = 3.5;
     const height = 3;
-    const width = 1.5;
+    const width = 1.8; // Slightly narrower for elegance
 
     const drawLetter = (letter, offsetX, pointsCount) => {
         for (let i = 0; i < pointsCount; i++) {
@@ -112,27 +112,31 @@ export function getHehePoints(count) {
             const section = Math.random();
 
             if (letter === 'h') {
-                if (section < 0.4) { // left stem
-                    x = 0; y = t * height - height / 2;
-                } else if (section < 0.7) { // bump
-                    const ang = t * Math.PI;
-                    x = Math.sin(ang) * (width / 2);
-                    y = Math.cos(ang) * (height / 4) - height / 4;
-                } else { // right stem (short)
-                    x = width / 2; y = t * (height / 2) - height / 2;
+                if (section < 0.5) { // Left Stem (Tall)
+                    x = -width / 3;
+                    y = (t - 0.5) * height;
+                } else if (section < 0.8) { // Arch Shoulder
+                    // Smooth curve from left stem to right leg
+                    const ang = (1 - t) * Math.PI;
+                    x = Math.cos(ang) * (width / 3);
+                    y = Math.sin(ang) * (height / 4);
+                } else { // Right Leg (Short)
+                    x = width / 3;
+                    y = (t * 0.5 - 0.5) * height;
                 }
             } else if (letter === 'e') {
-                const ang = t * Math.PI * 1.5 - Math.PI * 0.25;
-                if (section < 0.7) { // curve
-                    x = Math.cos(ang) * (width / 2);
-                    y = Math.sin(ang) * (height / 2);
-                } else { // middle bar
-                    x = (t - 0.5) * width; y = 0;
+                if (section < 0.3) { // Middle Bar
+                    x = (t - 0.5) * width / 2;
+                    y = 0;
+                } else { // Circle Curve
+                    const ang = t * Math.PI * 1.7; // 1.7 for an open bottom
+                    x = (Math.cos(ang) * width / 4);
+                    y = (Math.sin(ang) * width / 4);
                 }
             }
 
             z = (Math.random() - 0.5) * 0.5;
-            points.push({ x: x + offsetX, y: y + 1, z });
+            points.push({ x: x + offsetX, y: y + 0.5, z });
         }
     };
 
