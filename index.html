@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Particle Gesture Control | Flow with Hand</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div id="app">
+        <canvas id="particle-canvas"></canvas>
+
+        <div class="ui-overlay">
+            <div class="video-container">
+                <video id="input-video" playsinline></video>
+                <canvas id="output-canvas"></canvas>
+            </div>
+        </div>
+
+        <div id="loading-screen">
+            <div class="raccoon-loader">
+                <span class="raccoon">🦝</span>
+                <div class="jump-shadow"></div>
+            </div>
+            <p class="origin-text">Originating universe for my universe</p>
+            <div class="loading-instructions">
+                <p class="instruction-lead">do these</p>
+                <div class="emoji-row">
+                    <span class="emoji">🖐️</span>
+                    <span class="emoji">☝️</span>
+                    <span class="emoji">✊</span>
+                    <span class="emoji">✌️</span>
+                    <span class="emoji">🤟</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="module" src="/main.js"></script>
+</body>
+
+</html>
