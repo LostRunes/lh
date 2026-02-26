@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { Hands } from '@mediapipe/hands';
 import { Camera } from '@mediapipe/camera_utils';
 import { drawConnectors, drawLandmarks } from '@mediapipe/drawing_utils';
-import { SHAPE_TYPES, getSpreadPoints, getIPoints, getHeartPoints, getUPoints, getHehePoints } from './shapes.js';
+import { SHAPE_TYPES, getSpreadPoints, getIPoints, getHeartPoints, getUPoints, getHehePoints, getPhotoPoints } from './shapes.js';
 import { detectGesture } from './gestures.js';
 
 // --- Configuration ---
@@ -138,7 +138,7 @@ async function setupMediaPipe() {
         minTrackingConfidence: 0.6
     });
 
-    hands.onResults((results) => {
+    hands.onResults(async (results) => {
         canvasCtx.save();
         canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
 
@@ -148,14 +148,14 @@ async function setupMediaPipe() {
             // Gesture logic
             const gesture = detectGesture(landmarks);
             if (gesture !== currentGesture) {
-                handleGestureChange(gesture);
+                await handleGestureChange(gesture);
             }
 
             // Rotation Logic
             calculateRotation(landmarks);
 
         } else {
-            if (currentGesture !== 'SPREAD') handleGestureChange('SPREAD');
+            if (currentGesture !== 'SPREAD') await handleGestureChange('SPREAD');
             targetRotation.set(0, 0, 0);
         }
         canvasCtx.restore();
@@ -193,7 +193,7 @@ function calculateRotation(landmarks) {
     targetRotation.z = roll;
 }
 
-function handleGestureChange(gesture) {
+async function handleGestureChange(gesture) {
     currentGesture = gesture;
     switch (gesture) {
         case 'SPREAD': targetPoints = getSpreadPoints(PARTICLE_COUNT, 20); break;
@@ -201,6 +201,7 @@ function handleGestureChange(gesture) {
         case 'HEART': targetPoints = getHeartPoints(PARTICLE_COUNT); break;
         case 'U': targetPoints = getUPoints(PARTICLE_COUNT); break;
         case 'HEHE': targetPoints = getHehePoints(PARTICLE_COUNT); break;
+        case 'PHOTO': targetPoints = await getPhotoPoints(PARTICLE_COUNT); break;
     }
 }
 

@@ -45,5 +45,12 @@ export function detectGesture(landmarks) {
         return 'HEART';
     }
 
+    // 6. PHOTO (OK sign / 👌)
+    const thumbIndexDist = Math.hypot(landmarks[8].x - landmarks[4].x, landmarks[8].y - landmarks[4].y);
+    if (thumbIndexDist < 0.15 && !indexExtended && middleExtended && ringExtended && pinkyExtended) {
+        return 'PHOTO';
+    }
+
     return 'NONE';
 }
+

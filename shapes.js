@@ -3,7 +3,8 @@ export const SHAPE_TYPES = {
     I: 'I',
     HEART: 'HEART',
     U: 'U',
-    HEHE: 'HEHE'
+    HEHE: 'HEHE',
+    PHOTO: 'PHOTO'
 };
 
 export function getSpreadPoints(count, range = 10) {
@@ -151,4 +152,65 @@ export function getHehePoints(count) {
     }
 
     return points;
+}
+
+export async function getPhotoPoints(count) {
+    return new Promise((resolve) => {
+        const img = new Image();
+        img.src = '/photo.png';
+
+        img.onload = () => {
+
+            const size = 350;
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+
+            canvas.width = size;
+            canvas.height = size;
+
+            ctx.drawImage(img, 0, 0, size, size);
+
+            const imageData = ctx.getImageData(0, 0, size, size);
+            const data = imageData.data;
+
+            const getBrightness = (x, y) => {
+                const i = (y * size + x) * 4;
+                return (data[i] + data[i + 1] + data[i + 2]) / 3;
+            };
+
+            const rawPoints = [];
+
+            for (let y = 1; y < size - 1; y++) {
+                for (let x = 1; x < size - 1; x++) {
+
+                    const current = getBrightness(x, y);
+
+                    const right = getBrightness(x + 1, y);
+                    const bottom = getBrightness(x, y + 1);
+
+                    const diff = Math.abs(current - right) + Math.abs(current - bottom);
+
+                    // Edge threshold
+                    if (diff > 40) {
+
+                        rawPoints.push({
+                            x: (x - size / 2) * 0.05,
+                            y: -(y - size / 2) * 0.05,
+                            z: (Math.random() - 0.5) * 0.8
+                        });
+                    }
+                }
+            }
+
+            const sampled = [];
+
+            for (let i = 0; i < count; i++) {
+                sampled.push(
+                    rawPoints[Math.floor(Math.random() * rawPoints.length)]
+                );
+            }
+
+            resolve(sampled);
+        };
+    });
 }
